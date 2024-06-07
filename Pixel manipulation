@@ -1,0 +1,53 @@
+from PIL import Image 
+
+#trying the encryption function 
+def encrypt_image(image):
+    #converting the image to RGB mode 
+    image=image.convert('RGB')
+    #getting the pixel data
+    pixels=image.load()
+    
+    #encrypting the image by adding a constant value to each pixel
+    for x in range(image.width):
+        for y in range(image.height):
+            r,g,b=pixels[x,y]
+            #adding 100 to each pixel value
+            pixels[x,y]=((r+100)%256, (g+100)%256, (b+100)%256)
+            
+    return image
+
+#trying the decryption function 
+def decrypt_image(image):
+    #converting the image to RGB mode 
+    image=image.convert('RGB')
+    #getting the pixel data
+    pixels=image.load()
+    
+    #decrypting the image by subtracting same constant value from each pixel
+    for x in range(image.width):
+        for y in range(image.height):
+            r, g, b = pixels[x, y]
+            #subtracting 100 from each pixel
+            pixels[x, y] = ((r-100)%256, (g-50)%256, (b-50)%256)  
+            
+    return image 
+
+user_choice=input("Would you like to encrypt or decrypt the image? Type 'encrypt' or 'decrypt': ").lower()
+input_image_path = 'input.png'  # Assuming the input image is named input.png
+input_image = Image.open(input_image_path)
+
+if user_choice=='encrypt':
+    output_image_path='encrypted_image.png'
+    output_image = encrypt_image(input_image)
+    action = 'encrypted'
+elif user_choice == 'decrypt':
+    output_image_path = 'decrypted_image.png'
+    output_image = decrypt_image(input_image)
+    action = 'decrypted'
+else:
+    print("Invalid choice. Please choose 'encrypt' or 'decrypt'.")
+    exit()
+    
+#saving the output image 
+output_image.save(output_image_path)
+print(f"The image has been {action}! You can find it saved as '{output_image_path}'.")
